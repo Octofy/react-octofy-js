@@ -1,0 +1,86 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+const initOctofy = (maybe, args) => {
+  if (maybe === null) return null;
+  const octofy = maybe.apply(undefined, args);
+  return octofy;
+};
+let octofyPromise = null;
+const loadScript = params => {
+  if (octofyPromise !== null) return octofyPromise;
+  octofyPromise = new Promise((resolve, reject) => {
+    if (typeof window === "undefined") {
+      resolve(null);
+      return;
+    }
+
+    if (window.Octofy) {
+      resolve(window.Octofy);
+      return;
+    } // if nothing script process here...
+
+    try {
+      let script = findScript();
+      if (!script) script = injectScript();
+      script.addEventListener("load", () => {
+        if (window.Octofy) resolve(window.Octofy);
+        reject(new Error("Octofy.js not available."));
+      });
+      script.addEventListener("error", () => {
+        reject(new Error("Failed to load Octofy.js"));
+      });
+    } catch (error) {
+      reject(error);
+      return;
+    }
+  });
+  return octofyPromise;
+}; // TODO ドメイン決まり次第変える
+
+const V3_URL = "https://js.stripe.com/v3";
+const V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
+
+const findScript = () => {
+  const scripts = document.querySelectorAll(`script[src^="${V3_URL}"]`);
+
+  for (let i = 0; i < scripts.length; i++) {
+    const script = scripts[i];
+
+    if (!V3_URL_REGEX.test(script.src)) {
+      continue;
+    }
+
+    return script;
+  }
+
+  return null;
+};
+
+const injectScript = () => {
+  const script = document.createElement("script");
+  script.src = `${V3_URL}`;
+  const headOrBody = document.head || document.body;
+
+  if (!headOrBody) {
+    throw new Error(
+      "Expected document.body not to be null. Octofy.js requires a <body> element."
+    );
+  }
+
+  headOrBody.appendChild(script);
+  return script;
+};
+
+const octofyPromise$1 = Promise.resolve().then(() => loadScript());
+let loadCalled = false;
+octofyPromise$1.catch(err => {
+  if (!loadCalled) console.warn(err);
+});
+const loadOctofy = (...args) => {
+  loadCalled = true;
+  return octofyPromise$1.then(maybe => initOctofy(maybe, args));
+};
+
+exports.loadOctofy = loadOctofy;

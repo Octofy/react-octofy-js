@@ -1,0 +1,69 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "packing": "yarn build && npm pack && npm link ../dashboard/node_modules/react",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "react-octofy-js",
+  "author": "miki-matsumoto",
+  "module": "dist/react-octofy-js.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/react-octofy-js.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-octofy-js.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "alias": {
+    "react": "../node_modules/react",
+    "react-dom": "../node_modules/react-dom"
+  },
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^4.10.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.2",
+    "husky": "^5.2.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "size-limit": "^4.10.1",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "@octofy/octofy-js": "/Users/matsumotomiki/octofy/@octofy-js"
+  }
+}

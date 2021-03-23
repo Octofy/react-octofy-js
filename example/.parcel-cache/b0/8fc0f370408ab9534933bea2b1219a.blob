@@ -1,0 +1,135 @@
+var helpers = require("../example/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+try {
+  var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+  _parcelHelpers.defineInteropFlag(exports);
+  _parcelHelpers.export(exports, "OctofyProvider", function () {
+    return OctofyProvider;
+  });
+  _parcelHelpers.export(exports, "useVariation", function () {
+    return useVariation;
+  });
+  _parcelHelpers.export(exports, "useOctofy", function () {
+    return useOctofy;
+  });
+  var _react = require('react');
+  var _reactDefault = _parcelHelpers.interopDefault(_react);
+  var _jsxFileName = "/Users/matsumotomiki/octofy/react-octofy-js/src/index.tsx", _s = $RefreshSig$(), _s2 = $RefreshSig$(), _s3 = $RefreshSig$(), _s4 = $RefreshSig$();
+  const OctofyContext = /*#__PURE__*/_react.createContext(null);
+  const OctofyProvider = ({children, octofy}) => {
+    _s();
+    const final = _react.useRef(false);
+    const isMounted = _react.useRef(true);
+    const [ctx, setCtx] = _react.useState({
+      octofy: null
+    });
+    const parsed = _react.useMemo(() => parseOctofyProp(octofy), [octofy]);
+    if (!final.current) {
+      if (parsed.type === 'sync') {
+        setCtx({
+          octofy: parsed.octofy
+        });
+      }
+      if (parsed.type === 'async') {
+        final.current = true;
+        parsed.octofyPromise.then(octofy => {
+          if (octofy && isMounted.current) {
+            setCtx({
+              octofy
+            });
+          }
+        });
+      }
+    }
+    _react.useEffect(() => {
+      return () => {
+        isMounted.current = false;
+      };
+    }, []);
+    return (
+      /*#__PURE__*/_reactDefault.default.createElement(OctofyContext.Provider, {
+        value: ctx,
+        __self: undefined,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 53,
+          columnNumber: 5
+        }
+      }, children)
+    );
+  };
+  _s(OctofyProvider, "p9vKTpnpHUMel7BGqFPVHcoJlzA=");
+  _c = OctofyProvider;
+  const parseOctofyProp = raw => {
+    if (isPromise(raw)) {
+      return {
+        type: 'async',
+        octofyPromise: Promise.resolve(raw).then(validateOctofy)
+      };
+    }
+    const octofy = validateOctofy(raw);
+    if (octofy === null) {
+      return {
+        type: 'empty'
+      };
+    }
+    return {
+      type: 'sync',
+      octofy
+    };
+  };
+  const validateOctofy = maybeOctofy => {
+    if (maybeOctofy === null || isOctofy(maybeOctofy)) {
+      return maybeOctofy;
+    }
+    throw new Error('Error');
+  };
+  const isUnknownObject = raw => {
+    return raw !== null && typeof raw === 'object';
+  };
+  const isPromise = raw => {
+    return isUnknownObject(raw) && typeof raw.then === 'function';
+  };
+  const isOctofy = raw => {
+    return isUnknownObject(raw) && typeof raw.variation === 'function';
+  };
+  const useVariation = (featureKey, targetKey, defaultValue) => {
+    _s2();
+    const {octofy} = useOctofyContext();
+    Promise.resolve;
+    const variation = octofy?.variation?.(featureKey, targetKey, defaultValue)?.then?.(res => res);
+    console.log({
+      variation
+    });
+    return variation;
+  };
+  _s2(useVariation, "RC/rXNC2xOYCuQrh03kI7LAlCz4=", false, function () {
+    return [useOctofyContext];
+  });
+  const useOctofy = () => {
+    _s3();
+    const {octofy} = useOctofyContext();
+    return octofy;
+  };
+  _s3(useOctofy, "RC/rXNC2xOYCuQrh03kI7LAlCz4=", false, function () {
+    return [useOctofyContext];
+  });
+  const useOctofyContext = () => {
+    _s4();
+    const ctx = _react.useContext(OctofyContext);
+    return parseOctofyContext(ctx);
+  };
+  _s4(useOctofyContext, "/dMy7t63NXD4eYACoT93CePwGrg=");
+  const parseOctofyContext = ctx => {
+    if (!ctx) throw new Error('Could not find Octofy context. You need to wrap a <OctofyProvider>');
+    return ctx;
+  };
+  var _c;
+  $RefreshReg$(_c, "OctofyProvider");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

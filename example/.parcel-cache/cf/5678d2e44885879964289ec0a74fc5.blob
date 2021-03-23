@@ -1,0 +1,132 @@
+"use strict";
+var helpers = require("../example/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+try {
+  var _s = $RefreshSig$(), _s2 = $RefreshSig$(), _s3 = $RefreshSig$(), _s4 = $RefreshSig$();
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+  function _interopDefault(ex) {
+    return ex && typeof ex === 'object' && ('default' in ex) ? ex['default'] : ex;
+  }
+  var React = require('react');
+  var React__default = _interopDefault(React);
+  _c = React__default;
+  var OctofyContext = /*#__PURE__*/React.createContext(null);
+  var OctofyProvider = function OctofyProvider(_ref) {
+    _s();
+    var children = _ref.children, octofy = _ref.octofy;
+    var _final = React.useRef(false);
+    var isMounted = React.useRef(true);
+    var _useState = React.useState({
+      octofy: null
+    }), ctx = _useState[0], setCtx = _useState[1];
+    var parsed = React.useMemo(function () {
+      return parseOctofyProp(octofy);
+    }, [octofy]);
+    if (!_final.current) {
+      if (parsed.type === 'sync') {
+        setCtx({
+          octofy: parsed.octofy
+        });
+      }
+      if (parsed.type === 'async') {
+        _final.current = true;
+        parsed.octofyPromise.then(function (octofy) {
+          if (octofy && isMounted.current) {
+            setCtx({
+              octofy: octofy
+            });
+          }
+        });
+      }
+    }
+    React.useEffect(function () {
+      return function () {
+        isMounted.current = false;
+      };
+    }, []);
+    return React__default.createElement(OctofyContext.Provider, {
+      value: ctx
+    }, children);
+  };
+  _s(OctofyProvider, "vo7YT5hZrkKB06BjgLR0FLfBU0c=");
+  _c2 = OctofyProvider;
+  var parseOctofyProp = function parseOctofyProp(raw) {
+    if (isPromise(raw)) {
+      return {
+        type: 'async',
+        octofyPromise: Promise.resolve(raw).then(validateOctofy)
+      };
+    }
+    var octofy = validateOctofy(raw);
+    if (octofy === null) {
+      return {
+        type: 'empty'
+      };
+    }
+    return {
+      type: 'sync',
+      octofy: octofy
+    };
+  };
+  var validateOctofy = function validateOctofy(maybeOctofy) {
+    if (maybeOctofy === null || isOctofy(maybeOctofy)) {
+      return maybeOctofy;
+    }
+    throw new Error('Error');
+  };
+  var isUnknownObject = function isUnknownObject(raw) {
+    return raw !== null && typeof raw === 'object';
+  };
+  var isPromise = function isPromise(raw) {
+    return isUnknownObject(raw) && typeof raw.then === 'function';
+  };
+  var isOctofy = function isOctofy(raw) {
+    return isUnknownObject(raw) && typeof raw.variation === 'function';
+  };
+  var useVariation = function useVariation(featureKey, targetKey, defaultValue) {
+    _s2();
+    var _useOctofyContext = useOctofyContext(), octofy = _useOctofyContext.octofy;
+    var variation = octofy == null ? void 0 : octofy.variation(featureKey, targetKey, defaultValue).then(function (res) {
+      return res;
+    });
+    console.log({
+      variation: variation
+    });
+    return variation;
+  };
+  _s2(useVariation, "fA+qeL8gKhrgN6cBCtdB5e7no0Q=", false, function () {
+    return [useOctofyContext];
+  });
+  var useOctofy = function useOctofy() {
+    _s3();
+    var _useOctofyContext2 = useOctofyContext(), octofy = _useOctofyContext2.octofy;
+    return octofy;
+  };
+  _s3(useOctofy, "0incPoZUnVBYG8UtI+maTEznRZ4=", false, function () {
+    return [useOctofyContext];
+  });
+  var useOctofyContext = function useOctofyContext() {
+    _s4();
+    var ctx = React.useContext(OctofyContext);
+    return parseOctofyContext(ctx);
+  };
+  _s4(useOctofyContext, "/dMy7t63NXD4eYACoT93CePwGrg=");
+  var parseOctofyContext = function parseOctofyContext(ctx) {
+    if (!ctx) throw new Error('Could not find Octofy context. You need to wrap a <OctofyProvider>');
+    return ctx;
+  };
+  exports.OctofyProvider = OctofyProvider;
+  exports.useOctofy = useOctofy;
+  exports.useVariation = useVariation;
+  var _c, _c2;
+  $RefreshReg$(_c, "React__default");
+  $RefreshReg$(_c2, "OctofyProvider");
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
