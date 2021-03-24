@@ -120,6 +120,27 @@ export const useVariation = (
   return { variation, loading };
 };
 
+export const useTarget = () => {
+  return { register };
+};
+
+interface GroupOptions {
+  $name?: string;
+  $email?: string;
+  $avatar?: string;
+  $firstName?: string;
+  $lastName?: string;
+}
+
+const register = async (
+  groupKey: string,
+  targetKey: string,
+  options?: GroupOptions
+): Promise<void> => {
+  const { octofy } = useOctofyContext();
+  octofy?.register(groupKey, targetKey, options);
+};
+
 const useOctofyContext = () => {
   const ctx = useContext(OctofyContext);
   return parseOctofyContext(ctx);
