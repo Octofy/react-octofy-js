@@ -64,6 +64,6 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@octofy/octofy-js": "/Users/matsumotomiki/octofy/@octofy-js"
+    "@octofy/octofy-js": "^1.0.0"
   }
 }
